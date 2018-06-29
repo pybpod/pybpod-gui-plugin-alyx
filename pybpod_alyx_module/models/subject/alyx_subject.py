@@ -20,6 +20,7 @@ class AlyxSubject(SubjectUIBusy):
 
     def add_alyx_info(self,jsondata):
         print(json.dumps(jsondata))
+        print(self.uuid4)
         self.name = jsondata['nickname']
         self.alyx_nickname = jsondata['nickname']
         self.alyx_id = jsondata['id']
@@ -35,6 +36,7 @@ class AlyxSubject(SubjectUIBusy):
         self.alyx_death_date = jsondata['death_date']
         self.alyx_description = jsondata['description']
         self.alyx_strain = jsondata['strain']
+        print(self.uuid4)
         
 
     def save(self):
@@ -77,6 +79,32 @@ class AlyxSubject(SubjectUIBusy):
 
             config_path = os.path.join(self.path, self.name+'.json')
             with open(config_path, 'w') as fstream: json.dump(data, fstream)
+
+    def toJSON(self):
+        data = json.scadict(
+                    uuid4_id=self.uuid4,
+                    software='PyBpod GUI API v'+str(pybpodgui_api.__version__),
+                    def_url ='http://pybpod.readthedocs.org',
+                    def_text='This file contains information about a subject used on PyBpod GUI.',
+                )
+        data['name'] = self.name
+        data['uuid4'] = self.uuid4
+        data['nickname'] = self.alyx_nickname
+        data['alyx_id'] = self.alyx_id
+        data['species'] = self.alyx_species
+        data['genotype'] = self.alyx_genotype
+        data['litter'] = self.alyx_litter
+        data['alive'] = self.alyx_alive
+        data['url'] = self.alyx_url
+        data['line'] = self.alyx_line
+        data['birth_date'] = self.alyx_birth_date
+        data['responsible_user'] = self.alyx_responsible_user
+        data['sex'] = self.alyx_sex
+        data['death_date'] = self.alyx_death_date
+        data['description'] = self.alyx_description
+        data['strain'] = self.alyx_strain
+
+        return json.dumps(data)
 
     def load(self, path):
         """
