@@ -120,21 +120,21 @@ class AlyxSubject(SubjectUIBusy):
             with open( os.path.join(self.path, self.name+'.json'), 'r' ) as stream:
                 self.data = data = json.load(stream)
             
-            self.alyx_nickname = data['nickname']
+            self.alyx_nickname = data['nickname'] if 'nickname' in data.keys() else None
             self.uuid4 = data.uuid4 if data.uuid4 else self.uuid4
-            self.alyx_id = data['alyx_id'] if data['alyx_id'] else None
-            self.alyx_species = data['species'] if data['species'] else None
-            self.alyx_genotype = data['genotype'] if data['genotype'] else None
-            self.alyx_litter = data['litter'] if data['litter'] else None
-            self.alyx_alive = data['alive'] if data['alive'] else None
-            self.alyx_url = data['url'] if data['url'] else None
-            self.alyx_line = data['line'] if data['line'] else None
-            self.alyx_birth_date = data['birth_date'] if data['birth_date'] else None
-            self.alyx_responsible_user = data['responsible_user'] if data['responsible_user'] else None
-            self.alyx_sex = data['sex'] if data['sex'] else None
-            self.alyx_death_date = data['death_date'] if data['death_date'] else None
-            self.alyx_description = data['description'] if data['description'] else None
-            self.alyx_strain = data['strain'] if data['strain'] else None
+            self.alyx_id = data['alyx_id'] if 'alyx_id' in data.keys() else None
+            self.alyx_species = data['species'] if 'species' in data.keys() else None
+            self.alyx_genotype = data['genotype'] if 'genotype' in data.keys() else None
+            self.alyx_litter = data['litter'] if 'litter' in data.keys() else None
+            self.alyx_alive = data['alive'] if 'alive' in data.keys() else None
+            self.alyx_url = data['url'] if 'url' in data.keys() else None
+            self.alyx_line = data['line'] if 'line' in data.keys() else None
+            self.alyx_birth_date = data['birth_date'] if 'birth_date' in data.keys() else None
+            self.alyx_responsible_user = data['responsible_user'] if 'responsible_user' in data.keys() else None
+            self.alyx_sex = data['sex'] if 'sex' in data.keys() else None
+            self.alyx_death_date = data['death_date'] if 'death_date' in data.keys() else None
+            self.alyx_description = data['description'] if 'description' in data.keys() else None
+            self.alyx_strain = data['strain'] if 'strain' in data.keys() else None
 
         except:
             raise Exception('There was an error loading the configuration file for the subject [{0}]')
