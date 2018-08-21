@@ -1,6 +1,6 @@
 import pyforms
 from confapp import conf
-from pyforms import BaseWidget
+from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText, ControlButton, ControlLabel
 from pybpod_alyx_module.module_api import AlyxModule
 from AnyQt.QtWidgets import QLineEdit
