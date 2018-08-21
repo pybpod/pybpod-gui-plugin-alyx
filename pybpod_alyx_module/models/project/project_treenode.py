@@ -1,6 +1,6 @@
 import logging
 
-from pyforms import conf
+from confapp import conf
 from pybpodgui_plugin.models.project.project_window import ProjectWindow
 from AnyQt.QtGui import QIcon
 from pyforms.controls import ControlTree

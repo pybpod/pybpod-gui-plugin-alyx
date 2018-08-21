@@ -1,5 +1,5 @@
 import pyforms
-from pyforms import conf
+from confapp import conf
 from pyforms import BaseWidget
 from pyforms.controls import ControlText, ControlButton, ControlLabel
 from pybpod_alyx_module.module_api import AlyxModule

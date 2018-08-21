@@ -1,6 +1,6 @@
 import requests
 import json
-from pyforms import conf
+from confapp import conf
 
 class Post():
 

@@ -1,6 +1,6 @@
 import requests
 import json
-from pyforms import conf
+from confapp import conf
 
 #self.apibase.addr + '/subjects' = conf.ALYX_ADDR+'/subjects'
 

@@ -3,7 +3,7 @@ import logging
 import glob
 import hashlib, pybpodgui_api
 from AnyQt.QtGui import QIcon
-from pyforms import conf
+from confapp import conf
 from pybpodgui_api.utils.send2trash_wrapper import send2trash
 from sca.formats import json
 from pybpodgui_api.models.project.project_base import ProjectBase
