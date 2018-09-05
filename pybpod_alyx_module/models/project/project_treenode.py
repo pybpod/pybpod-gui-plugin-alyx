@@ -9,7 +9,6 @@ from pybpod_alyx_module.module_gui import AlyxModuleGUI
 class ProjectTreeNode(ProjectWindow):
 
 	def create_treenode(self, tree):
-		print('creating treenode')
 		node = super(ProjectTreeNode, self).create_treenode(tree)
 		self.open_alyx_action = tree.add_popup_menu_option(
             'Sync to Alyx', 

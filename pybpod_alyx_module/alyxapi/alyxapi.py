@@ -19,7 +19,7 @@ class AlyxAPI():
         result = requests.post(self.addr+'/auth-token',data=_data)
         if result.ok:
             token = result.json()
-            print(token)
+            
             self.headers = {
                 'Authorization': 'Token {}'.format(list(token.values())[0]),
                 'Accept': 'application/json',
@@ -30,8 +30,7 @@ class AlyxAPI():
 
     def getusers(self):
         result = requests.get(self._addr+'/users',self.headers)
-        if result.ok:
-            print(result.json())
+
 
     def getaddr(self):
         return self.addr
