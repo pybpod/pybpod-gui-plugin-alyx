@@ -51,7 +51,7 @@ class UserWindow(User, AlyxModule, BaseWidget):
             print('NOT CONNECTED')
 
     def _get_subjects(self):
-        result = self.get_alyx_subjects()
+        result = self.get_alyx_subjects(self._name)
         for subj in result:
             subjname = subj['nickname']
             print('adding subject to project')
