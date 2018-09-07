@@ -10,8 +10,8 @@ class AlyxModule(object):
     def _connect_to_alyx(self,username, password):
         return self.api.login(username,password)
     
-    def get_alyx_subjects(self):
-        return self.api.subjects.get.allsubjects()
+    def get_alyx_subjects(self, username):
+        return self.api.subjects.get.usersubjects(username)
     
     def get_alyx_address(self):
         return self.api.getaddr()

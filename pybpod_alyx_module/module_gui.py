@@ -64,7 +64,7 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
             self.project.loggeduser = self.project.loggeduser
 
     def _get_subjects(self):
-        result = self.get_alyx_subjects()
+        result = self.get_alyx_subjects(self._username.value)
         for subj in result:
             subjname = subj['nickname']
             existing = False

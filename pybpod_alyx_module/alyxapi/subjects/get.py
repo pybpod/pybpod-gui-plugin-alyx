@@ -12,7 +12,17 @@ class Get():
 
     def allsubjects(self):
         print('getting subjects')
-        result = requests.get(self.apibase.addr + '/subjects',headers= self.apibase.headers)
+        result = requests.get(self.apibase.addr + '/subjects',headers=self.apibase.headers)
+        if result.ok:
+            result_data = result.json()
+            return result_data
+            
+        return None
+
+    
+    def usersubjects(self, username):
+        print('getting subjects')
+        result = requests.get(self.apibase.addr + '/subjects?responsible_user=' + username, headers=self.apibase.headers)
         if result.ok:
             result_data = result.json()
             return result_data
