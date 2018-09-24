@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 
 setup(
-	name='pybpod_alyx_module',
+	name='pybpod-gui-plugin-alyx',
 	version=0,
 	description="""PyBpod Alyx API connectoin module""",
 	author=['Sergio Copeto'],

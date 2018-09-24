@@ -6,3 +6,5 @@ pybpod_alyx_module\.egg-info/
 build/
 
 dist/
+
+pybpod_gui_plugin_alyx\.egg-info/
