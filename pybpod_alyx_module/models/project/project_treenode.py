@@ -1,17 +1,13 @@
-import logging
-
-from confapp import conf
-from pybpodgui_plugin.models.project.project_window import ProjectWindow
-from AnyQt.QtGui import QIcon
-from pyforms.controls import ControlTree
 from pybpod_alyx_module.module_gui import AlyxModuleGUI
+from pybpodgui_plugin.models.project.project_window import ProjectWindow
+
 
 class ProjectTreeNode(ProjectWindow):
 
 	def create_treenode(self, tree):
 		node = super(ProjectTreeNode, self).create_treenode(tree)
 		self.open_alyx_action = tree.add_popup_menu_option(
-            'Sync to Alyx', 
+            'Sync to Alyx',
             self.open_alyx_window,
             item= node
             )

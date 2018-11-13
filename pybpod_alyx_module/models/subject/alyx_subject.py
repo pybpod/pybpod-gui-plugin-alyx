@@ -1,41 +1,40 @@
-import os
 import logging
-import glob
-import hashlib, pybpodgui_api
+import os
+import pybpodgui_api
 from AnyQt.QtGui import QIcon
 from confapp import conf
-from pybpodgui_api.utils.send2trash_wrapper import send2trash
-from sca.formats import json
-from pybpodgui_api.models.project.project_base import ProjectBase
-from pybpodgui_api.exceptions.api_error import APIError
-
-from pybpodgui_plugin.models.subject.subject_uibusy import SubjectUIBusy
-
 from pybpod_alyx_module.alyx_details import AlyxDetails
+from pybpodgui_plugin.models.subject.subject_uibusy import SubjectUIBusy
+from sca.formats import json
+
+logger = logging.getLogger(__name__)
 
 class AlyxSubject(SubjectUIBusy):
 
-    def __init__(self,project):
+    def __init__(self, project):
         super(AlyxSubject, self).__init__(project)
 
-    def add_alyx_info(self,jsondata):
+    def add_alyx_info(self, jsondata):
         print(json.dumps(jsondata))
         print(self.uuid4)
         self.name = jsondata['nickname']
         self.alyx_nickname = jsondata['nickname']
         self.alyx_id = jsondata['id']
-        self.alyx_species = jsondata['species']
-        self.alyx_genotype = jsondata['genotype']
-        self.alyx_litter = jsondata['litter']
-        self.alyx_alive = jsondata['alive']
         self.alyx_url = jsondata['url']
-        self.alyx_line = jsondata['line']
-        self.alyx_birth_date = jsondata['birth_date']
         self.alyx_responsible_user = jsondata['responsible_user']
-        self.alyx_sex = jsondata['sex']
+        self.alyx_birth_date = jsondata['birth_date']
         self.alyx_death_date = jsondata['death_date']
-        self.alyx_description = jsondata['description']
+        self.alyx_species = jsondata['species']
+        self.alyx_sex = jsondata['sex']
+        self.alyx_litter = jsondata['litter']
         self.alyx_strain = jsondata['strain']
+        self.alyx_line = jsondata['line']
+        self.alyx_description = jsondata['description']
+        self.alyx_lab = jsondata['lab']
+        self.alyx_genotype = jsondata['genotype']
+        self.alyx_alive = jsondata['alive']
+        self.alyx_projects = jsondata['projects']
+
         print(self.uuid4)
         
 
@@ -64,18 +63,20 @@ class AlyxSubject(SubjectUIBusy):
                 )
             data['nickname'] = self.alyx_nickname
             data['alyx_id'] = self.alyx_id
-            data['species'] = self.alyx_species
-            data['genotype'] = self.alyx_genotype
-            data['litter'] = self.alyx_litter
-            data['alive'] = self.alyx_alive
             data['url'] = self.alyx_url
-            data['line'] = self.alyx_line
-            data['birth_date'] = self.alyx_birth_date
             data['responsible_user'] = self.alyx_responsible_user
-            data['sex'] = self.alyx_sex
+            data['birth_date'] = self.alyx_birth_date
             data['death_date'] = self.alyx_death_date
-            data['description'] = self.alyx_description
+            data['species'] = self.alyx_species
+            data['sex'] = self.alyx_sex
+            data['litter'] = self.alyx_litter
             data['strain'] = self.alyx_strain
+            data['line'] = self.alyx_line
+            data['description'] = self.alyx_description
+            data['lab'] = self.alyx_lab
+            data['genotype'] = self.alyx_genotype
+            data['alive'] = self.alyx_alive
+            data['projects'] = self.alyx_projects
 
             config_path = os.path.join(self.path, self.name+'.json')
             with open(config_path, 'w') as fstream: json.dump(data, fstream)
@@ -91,24 +92,26 @@ class AlyxSubject(SubjectUIBusy):
         data['uuid4'] = self.uuid4
         data['nickname'] = self.alyx_nickname
         data['alyx_id'] = self.alyx_id
-        data['species'] = self.alyx_species
-        data['genotype'] = self.alyx_genotype
-        data['litter'] = self.alyx_litter
-        data['alive'] = self.alyx_alive
         data['url'] = self.alyx_url
-        data['line'] = self.alyx_line
-        data['birth_date'] = self.alyx_birth_date
         data['responsible_user'] = self.alyx_responsible_user
-        data['sex'] = self.alyx_sex
+        data['birth_date'] = self.alyx_birth_date
         data['death_date'] = self.alyx_death_date
-        data['description'] = self.alyx_description
+        data['species'] = self.alyx_species
+        data['sex'] = self.alyx_sex
+        data['litter'] = self.alyx_litter
         data['strain'] = self.alyx_strain
+        data['line'] = self.alyx_line
+        data['description'] = self.alyx_description
+        data['lab'] = self.alyx_lab
+        data['genotype'] = self.alyx_genotype
+        data['alive'] = self.alyx_alive
+        data['projects'] = self.alyx_projects
 
         return json.dumps(data)
 
     def load(self, path):
         """
-        Load sebject data from filesystem
+        Load subject data from filesystem
 
         :ivar str subject_path: Path of the subject
         :ivar dict data: data object that contains all subject info
@@ -119,22 +122,25 @@ class AlyxSubject(SubjectUIBusy):
         try:
             with open( os.path.join(self.path, self.name+'.json'), 'r' ) as stream:
                 self.data = data = json.load(stream)
-            
-            self.alyx_nickname = data['nickname'] if 'nickname' in data.keys() else None
+
+            #self.name = data['name'] if 'name' in data.keys() else None
             self.uuid4 = data.uuid4 if data.uuid4 else self.uuid4
+            self.alyx_nickname = data['nickname'] if 'nickname' in data.keys() else None
             self.alyx_id = data['alyx_id'] if 'alyx_id' in data.keys() else None
-            self.alyx_species = data['species'] if 'species' in data.keys() else None
-            self.alyx_genotype = data['genotype'] if 'genotype' in data.keys() else None
-            self.alyx_litter = data['litter'] if 'litter' in data.keys() else None
-            self.alyx_alive = data['alive'] if 'alive' in data.keys() else None
             self.alyx_url = data['url'] if 'url' in data.keys() else None
-            self.alyx_line = data['line'] if 'line' in data.keys() else None
-            self.alyx_birth_date = data['birth_date'] if 'birth_date' in data.keys() else None
             self.alyx_responsible_user = data['responsible_user'] if 'responsible_user' in data.keys() else None
-            self.alyx_sex = data['sex'] if 'sex' in data.keys() else None
+            self.alyx_birth_date = data['birth_date'] if 'birth_date' in data.keys() else None
             self.alyx_death_date = data['death_date'] if 'death_date' in data.keys() else None
-            self.alyx_description = data['description'] if 'description' in data.keys() else None
+            self.alyx_species = data['species'] if 'species' in data.keys() else None
+            self.alyx_sex = data['sex'] if 'sex' in data.keys() else None
+            self.alyx_litter = data['litter'] if 'litter' in data.keys() else None
             self.alyx_strain = data['strain'] if 'strain' in data.keys() else None
+            self.alyx_line = data['line'] if 'line' in data.keys() else None
+            self.alyx_description = data['description'] if 'description' in data.keys() else None
+            self.alyx_lab = data['lab'] if 'lab' in data.keys() else None
+            self.alyx_genotype = data['genotype'] if 'genotype' in data.keys() else None
+            self.alyx_alive = data['alive'] if 'alive' in data.keys() else None
+            self.alyx_projects = data['projects'] if 'projects' in data.keys() else None
 
         except:
             raise Exception('There was an error loading the configuration file for the subject [{0}]')
