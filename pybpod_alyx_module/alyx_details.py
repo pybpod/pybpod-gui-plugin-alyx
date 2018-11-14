@@ -18,8 +18,8 @@ class AlyxDetails(AlyxModule, BaseWidget):
         self._id_text = ControlLabel('ID:')
         self._id = ControlLabel(_subject.alyx_id)
 
-        self._url_text = ControlLabel('URL:')
-        self._url = ControlLabel(_subject.alyx_url)
+        # self._url_text = ControlLabel('URL:')
+        # self._url = ControlLabel(_subject.alyx_url)
 
         self._responsible_user_text = ControlLabel('Responsible user:')
         self._responsible_user = ControlLabel(_subject.alyx_responsible_user)
@@ -88,7 +88,7 @@ class AlyxDetails(AlyxModule, BaseWidget):
         self.formset = [
             ('_nickname_text', '_nickname'),
             ('_id_text', '_id'),
-            ('_url_text', '_url'),
+            # ('_url_text', '_url'),
             ('_responsible_user_text', '_responsible_user'),
             ('_birth_text', '_birth'),
             ('_death_text', '_death'),
