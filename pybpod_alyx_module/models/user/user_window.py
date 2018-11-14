@@ -1,3 +1,4 @@
+from AnyQt import QtCore
 from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText, ControlButton, ControlLabel
 from pybpod_alyx_module.module_api import AlyxModule
@@ -42,6 +43,8 @@ class UserWindow(User, AlyxModule, BaseWidget):
             '_status_lbl',
             '_getsubjects_btn'
         ]
+
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def _connect(self):
         if self._connect_to_alyx(self._namebox.value,self._password.value):

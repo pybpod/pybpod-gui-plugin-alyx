@@ -1,3 +1,4 @@
+from AnyQt import QtCore
 from pybpod_alyx_module.module_api import AlyxModule
 from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlLabel
@@ -80,8 +81,8 @@ class AlyxDetails(AlyxModule, BaseWidget):
         #     ]
         # },
 
-
         self.set_margin(10)
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
         #self._nickname.enabled = False
         self.formset = [

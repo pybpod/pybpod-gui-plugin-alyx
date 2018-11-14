@@ -1,4 +1,5 @@
 import pyforms
+from AnyQt import QtCore
 from confapp import conf
 from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText, ControlButton, ControlLabel
@@ -22,8 +23,8 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         self._addressbox = ControlText('Address')
         self._username = ControlText('User:')
         self._password = ControlText('Password:')
-        #self._username = ControlText('User:',default = 'test_user')
-        #self._password = ControlText('Password:', default = 'test')
+        self._username = ControlText('User:',default = 'luis')
+        self._password = ControlText('Password:', default = 'BulbTop58')
         self._connect_btn = ControlButton('Connect',default = self._connect)
         self._status_lbl = ControlLabel('Status: Not Connected')
         self._getsubjects_btn = ControlButton('Get Subjects', default = self._get_subjects)
@@ -46,6 +47,8 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
             '_status_lbl',
             '_getsubjects_btn'
         ]
+
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def setaddr(self):
         self.api.setaddr(self._addressbox.value)
