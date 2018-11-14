@@ -16,7 +16,7 @@ class AlyxSubject(SubjectUIBusy):
 
     def add_alyx_info(self, jsondata):
         print(json.dumps(jsondata))
-        print(self.uuid4)
+        # print(self.uuid4)
         self.name = jsondata['nickname']
         self.alyx_nickname = jsondata['nickname']
         self.alyx_id = jsondata['id']
@@ -35,7 +35,7 @@ class AlyxSubject(SubjectUIBusy):
         self.alyx_alive = jsondata['alive']
         self.alyx_projects = jsondata['projects']
 
-        print(self.uuid4)
+        # print(self.uuid4)
         
 
     def save(self):

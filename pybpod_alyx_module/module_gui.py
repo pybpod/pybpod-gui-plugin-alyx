@@ -1,14 +1,12 @@
-import pyforms
 from AnyQt import QtCore
+from AnyQt.QtWidgets import QLineEdit
 from confapp import conf
+from pybpod_alyx_module.models.subject.alyx_subject import AlyxSubject
+from pybpod_alyx_module.module_api import AlyxModule
+from pybpodgui_api.models.project import Project
 from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText, ControlButton, ControlLabel
-from pybpod_alyx_module.module_api import AlyxModule
-from AnyQt.QtWidgets import QLineEdit
 
-from pybpodgui_api.models.project import Project
-from pybpod_alyx_module.models.subject.alyx_subject import AlyxSubject
-from pybpodgui_api.models.subject import Subject
 
 class AlyxModuleGUI(AlyxModule, BaseWidget):
 
@@ -67,6 +65,7 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
             self.project.loggeduser = self.project.loggeduser
 
     def _get_subjects(self):
+        # todo: check if connected or else this call will crash the app
         result = self.get_alyx_subjects(self._username.value)
         for subj in result:
             subjname = subj['nickname']
@@ -78,9 +77,9 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
                     if reply == 'yes':
                         s.add_alyx_info(subj)
             if existing == False:
+                # SubjectBase constructor adds Subject automatically to self.project
                 newsubject = AlyxSubject(self.project)
                 newsubject.add_alyx_info(subj)
-                self.project += newsubject
             
 
             
