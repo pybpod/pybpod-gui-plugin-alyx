@@ -26,7 +26,7 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         self._connect_btn = ControlButton('Connect',default = self._connect)
         self._status_lbl = ControlLabel('Status: Not Connected')
         self._getsubjects_btn = ControlButton('Get Subjects', default = self._get_subjects)
-
+        self._getsubjects_btn.enabled = False
         self.set_margin(10)
 
         self._addressbox.value = conf.ALYX_ADDR
@@ -63,9 +63,9 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
             self.project.loggeduser.connection = 'ALYX'
             self._status_lbl.value = 'Status: CONNECTED'
             self.project.loggeduser = self.project.loggeduser
+            self._getsubjects_btn.enabled = True
 
     def _get_subjects(self):
-        # todo: check if connected or else this call will crash the app
         result = self.get_alyx_subjects(self._username.value)
         for subj in result:
             subjname = subj['nickname']
