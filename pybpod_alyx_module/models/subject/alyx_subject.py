@@ -176,6 +176,7 @@ class AlyxSubject(SubjectUIBusy):
         if not hasattr(self, 'detailswindow'):
             self.detailswindow = AlyxDetails(self)
         self.detailswindow.show()
+        return self.detailswindow
 
 '''
 test_subject = {

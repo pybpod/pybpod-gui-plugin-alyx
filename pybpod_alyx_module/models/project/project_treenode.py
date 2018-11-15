@@ -15,8 +15,7 @@ class ProjectTreeNode(ProjectWindow):
 		return node
 	
 	def open_alyx_window(self):
-		if not hasattr(self,'alyx_window'):
+		if not hasattr(self, 'alyx_window'):
 			self.alyx_window = AlyxModuleGUI(self)
-			self.alyx_window.show()
-		else:
-			self.alyx_window.show()
+		self.alyx_window.show()
+		return self.alyx_window

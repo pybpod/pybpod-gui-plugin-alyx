@@ -1,9 +1,9 @@
-from AnyQt import QtCore
+import pyforms
+from AnyQt import QtGui, QtCore
 from AnyQt.QtWidgets import QLineEdit
 from confapp import conf
 from pybpod_alyx_module.models.subject.alyx_subject import AlyxSubject
 from pybpod_alyx_module.module_api import AlyxModule
-from pybpodgui_api.models.project import Project
 from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlText, ControlButton, ControlLabel
 
@@ -12,8 +12,8 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
 
     TITLE = 'Alyx connection'
 
-    def __init__(self, _project : Project):
-        BaseWidget.__init__(self, self.TITLE)
+    def __init__(self, _project=None):
+        BaseWidget.__init__(self, self.TITLE, parent_win=_project)
         AlyxModule.__init__(self)
 
         self.project = _project
@@ -45,8 +45,6 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
             '_status_lbl',
             '_getsubjects_btn'
         ]
-
-        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def setaddr(self):
         self.api.setaddr(self._addressbox.value)
@@ -80,6 +78,10 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
                 # SubjectBase constructor adds Subject automatically to self.project
                 newsubject = AlyxSubject(self.project)
                 newsubject.add_alyx_info(subj)
-            
 
-            
+    def keyPressEvent(self, event: QtGui.QKeyEvent):
+        if event.key() == QtCore.Qt.Key_Escape:
+            self.close()
+
+if __name__ == '__main__':
+    pyforms.start_app(AlyxModuleGUI, geometry=(0, 0, 300, 300))

@@ -1,4 +1,4 @@
-from AnyQt import QtCore
+from AnyQt import QtCore, QtGui
 from pybpod_alyx_module.module_api import AlyxModule
 from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlLabel
@@ -8,8 +8,8 @@ class AlyxDetails(AlyxModule, BaseWidget):
 
     TITLE = 'Subject Details'
 
-    def __init__(self, _subject):
-        BaseWidget.__init__(self, self.TITLE)
+    def __init__(self, _subject=None):
+        BaseWidget.__init__(self, self.TITLE, parent_win=_subject.project)
         AlyxModule.__init__(self)
 
         self._nickname_text = ControlLabel('Nickname:')
@@ -52,39 +52,16 @@ class AlyxDetails(AlyxModule, BaseWidget):
         self._lab = ControlLabel(_subject.alyx_lab)
 
         self._genotype_text = ControlLabel('Genotype:')
-        self._genotype = ControlLabel("\n".join(map(str, _subject.alyx_genotype)) if _subject.alyx_genotype else None)
+        self._genotype = ControlLabel(", ".join(map(str, _subject.alyx_genotype)) if _subject.alyx_genotype else None)
 
         self._alive_text = ControlLabel('Alive:')
         self._alive = ControlLabel(str(_subject.alyx_alive))
 
         self._projects_text = ControlLabel('Projects:')
-        self._projects = ControlLabel("\n".join(map(str, _subject.alyx_projects)) if _subject.alyx_projects else None)
-
-        # {
-        #     "nickname": "test_mouse0",
-        #     "id": "ab627ee2-e438-4fcb-9eea-d0ab779c2de6",
-        #     "url": "https://dev.alyx.internationalbrainlab.org/subjects/test_mouse0",
-        #     "responsible_user": "test_user",
-        #     "birth_date": "2018-11-13",
-        #     "death_date": null,
-        #     "species": "Laboratory mouse",
-        #     "sex": "M",
-        #     "litter": "Ai148.Vg_L_003",
-        #     "strain": "C57BL/6J",
-        #     "line": "DAT-IRES-Cre",
-        #     "description": "",
-        #     "lab": null,
-        #     "genotype": [],
-        #     "alive": true,
-        #     "projects": [
-        #         "ibl_mainenlab"
-        #     ]
-        # },
+        self._projects = ControlLabel(", ".join(map(str, _subject.alyx_projects)) if _subject.alyx_projects else None)
 
         self.set_margin(10)
-        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
-        #self._nickname.enabled = False
         self.formset = [
             ('_nickname_text', '_nickname'),
             ('_id_text', '_id'),
@@ -103,3 +80,7 @@ class AlyxDetails(AlyxModule, BaseWidget):
             ('_alive_text', '_alive'),
             ('_projects_text', '_projects')
         ]
+
+    def keyPressEvent(self, event: QtGui.QKeyEvent):
+        if event.key() == QtCore.Qt.Key_Escape:
+            self.close()
