@@ -83,5 +83,6 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         if event.key() == QtCore.Qt.Key_Escape:
             self.close()
 
+
 if __name__ == '__main__':
     pyforms.start_app(AlyxModuleGUI, geometry=(0, 0, 300, 300))
