@@ -1,14 +1,14 @@
 import logging
 import os
+
 import pybpodgui_api
 from pybpod_alyx_module.alyx_details import AlyxDetails
-from pybpodgui_plugin.models.subject.subject_uibusy import SubjectUIBusy
 from sca.formats import json
 
 logger = logging.getLogger(__name__)
 
 
-class AlyxSubject(SubjectUIBusy):
+class AlyxSubject(object):
 
     def __init__(self, project):
         super(AlyxSubject, self).__init__(project)
@@ -36,7 +36,7 @@ class AlyxSubject(SubjectUIBusy):
 
         # print(self.uuid4)
         self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
-        
+        self._name.readonly = True
 
     def save(self):
         """
@@ -154,6 +154,7 @@ class AlyxSubject(SubjectUIBusy):
             self.alyx_projects = data.get('projects', None)
 
             self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
+            self._name.readonly = True
 
         except:
             raise Exception(f'There was an error loading the configuration file for the subject [{self.name}]. File not found.')
