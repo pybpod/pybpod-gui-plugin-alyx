@@ -74,8 +74,8 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
                     reply = self.question(f"Subject '{s.name}' already exists locally. Replace local details?", 'Update Subject')
                     if reply == 'yes':
                         s.add_alyx_info(subj)
-            if existing == False:
-                # SubjectBase constructor adds Subject automatically to self.project
+            if not existing:
+                # SubjectBase constructor adds Subject automatically to self.project so there's no need to add it here
                 newsubject = AlyxSubject(self.project)
                 newsubject.add_alyx_info(subj)
 

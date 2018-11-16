@@ -1,13 +1,12 @@
 import logging
 import os
 import pybpodgui_api
-from AnyQt.QtGui import QIcon
-from confapp import conf
 from pybpod_alyx_module.alyx_details import AlyxDetails
 from pybpodgui_plugin.models.subject.subject_uibusy import SubjectUIBusy
 from sca.formats import json
 
 logger = logging.getLogger(__name__)
+
 
 class AlyxSubject(SubjectUIBusy):
 
@@ -36,6 +35,7 @@ class AlyxSubject(SubjectUIBusy):
         self.alyx_projects = jsondata['projects']
 
         # print(self.uuid4)
+        self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
         
 
     def save(self):
@@ -46,6 +46,10 @@ class AlyxSubject(SubjectUIBusy):
         :return: Dictionary containing the setup info to save.  
         :rtype: dict
         """
+        if not hasattr(self, 'alyx_id'):
+            super().save()
+            return
+
         if not self.name:
             logger.warning("Skipping subject without name")
             return None
@@ -82,6 +86,9 @@ class AlyxSubject(SubjectUIBusy):
             with open(config_path, 'w') as fstream: json.dump(data, fstream)
 
     def toJSON(self):
+        if not hasattr(self, 'alyx_id'):
+            return super().toJSON()
+
         data = json.scadict(
                     uuid4_id=self.uuid4,
                     software='PyBpod GUI API v'+str(pybpodgui_api.__version__),
@@ -123,27 +130,33 @@ class AlyxSubject(SubjectUIBusy):
             with open( os.path.join(self.path, self.name+'.json'), 'r' ) as stream:
                 self.data = data = json.load(stream)
 
-            #self.name = data['name'] if 'name' in data.keys() else None
+            if data.get('alyx_id', None) is None:
+                super().load(path)
+                return
+
+            #self.name = data.get('name', None)
             self.uuid4 = data.uuid4 if data.uuid4 else self.uuid4
-            self.alyx_nickname = data['nickname'] if 'nickname' in data.keys() else None
-            self.alyx_id = data['alyx_id'] if 'alyx_id' in data.keys() else None
-            self.alyx_url = data['url'] if 'url' in data.keys() else None
-            self.alyx_responsible_user = data['responsible_user'] if 'responsible_user' in data.keys() else None
-            self.alyx_birth_date = data['birth_date'] if 'birth_date' in data.keys() else None
-            self.alyx_death_date = data['death_date'] if 'death_date' in data.keys() else None
-            self.alyx_species = data['species'] if 'species' in data.keys() else None
-            self.alyx_sex = data['sex'] if 'sex' in data.keys() else None
-            self.alyx_litter = data['litter'] if 'litter' in data.keys() else None
-            self.alyx_strain = data['strain'] if 'strain' in data.keys() else None
-            self.alyx_line = data['line'] if 'line' in data.keys() else None
-            self.alyx_description = data['description'] if 'description' in data.keys() else None
-            self.alyx_lab = data['lab'] if 'lab' in data.keys() else None
-            self.alyx_genotype = data['genotype'] if 'genotype' in data.keys() else None
-            self.alyx_alive = data['alive'] if 'alive' in data.keys() else None
-            self.alyx_projects = data['projects'] if 'projects' in data.keys() else None
+            self.alyx_nickname = data.get('nickname', None)
+            self.alyx_id = data.get('alyx_id', None)
+            self.alyx_url = data.get('url', None)
+            self.alyx_responsible_user = data.get('responsible_user', None)
+            self.alyx_birth_date = data.get('birth_date', None)
+            self.alyx_death_date = data.get('death_date', None)
+            self.alyx_species = data.get('species', None)
+            self.alyx_sex = data.get('sex', None)
+            self.alyx_litter = data.get('litter', None)
+            self.alyx_strain = data.get('strain', None)
+            self.alyx_line = data.get('line', None)
+            self.alyx_description = data.get('description', None)
+            self.alyx_lab = data.get('lab', None)
+            self.alyx_genotype = data.get('genotype', None)
+            self.alyx_alive = data.get('alive', None)
+            self.alyx_projects = data.get('projects', None)
+
+            self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
 
         except:
-            raise Exception('There was an error loading the configuration file for the subject [{0}]')
+            raise Exception(f'There was an error loading the configuration file for the subject [{self.name}]. File not found.')
 
     def create_treenode(self, tree):
         """
@@ -163,13 +176,11 @@ class AlyxSubject(SubjectUIBusy):
         :return: new created node
         :return type: QTreeWidgetItem
         """
-        self.node 						= tree.create_child(self.name, self.project.subjects_node, icon=QIcon(conf.SUBJECT_SMALL_ICON))
-        self.node.key_pressed_event 	= self.node_key_pressed_event
-        self.node.window 				= self
-        self.node.setExpanded(True)
+        super().create_treenode(tree)
 
-        tree.add_popup_menu_option('Remove', self.remove, item=self.node, icon=QIcon(conf.REMOVE_SMALL_ICON))
-        tree.add_popup_menu_option('Alyx Details', self.showdetails, item = self.node)
+        # save the tree so we can add the pop-up on load and add_alyx_info for those subjects that require it
+        self._tree = tree
+
         return self.node
 
     def showdetails(self):
