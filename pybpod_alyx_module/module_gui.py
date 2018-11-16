@@ -73,11 +73,13 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
                     existing = True
                     reply = self.question(f"Subject '{s.name}' already exists locally. Replace local details?", 'Update Subject')
                     if reply == 'yes':
-                        s.add_alyx_info(subj)
+                        subj_info = self.get_alyx_subject_info(subjname)
+                        s.add_alyx_info(subj_info)
             if not existing:
+                subj_info = self.get_alyx_subject_info(subjname)
                 # SubjectBase constructor adds Subject automatically to self.project so there's no need to add it here
                 newsubject = AlyxSubject(self.project)
-                newsubject.add_alyx_info(subj)
+                newsubject.add_alyx_info(subj_info)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key_Escape:
