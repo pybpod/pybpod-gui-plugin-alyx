@@ -170,12 +170,12 @@ class AlyxSubject(SubjectUIBusy):
             self.alyx_strain = data.get('strain', None)
             self.alyx_source = data.get('source', None)
             self.alyx_line = data.get('line', None)
-            self.alyx_projects = data.get('projects', None)
+            self.alyx_projects = data.get('projects', [])
             self.alyx_lab = data.get('lab', None)
-            self.alyx_genotype = data.get('genotype', None)
+            self.alyx_genotype = data.get('genotype', [])
             self.alyx_description = data.get('description', None)
-            self.alyx_weighings = data.get('weighings', None)
-            self.alyx_water_administrations = data.get('water_administrations', None)
+            self.alyx_weighings = data.get('weighings', [])
+            self.alyx_water_administrations = data.get('water_administrations', [])
             self.alyx_reference_weight = data.get('reference_weight', None)
             self.alyx_last_water_restriction = data.get('last_water_restriction', None)
             self.alyx_expected_water = data.get('expected_water', None)
@@ -217,3 +217,50 @@ class AlyxSubject(SubjectUIBusy):
             self.detailswindow = AlyxDetails(self)
         self.detailswindow.show()
         return self.detailswindow
+
+    def collect_data(self, data):
+        _data = super().collect_data(data)
+
+        if not hasattr(self, 'alyx_id'):
+            return _data
+
+        _data.update({'nickname': self.alyx_nickname})
+        _data.update({'url': self.alyx_url})
+        _data.update({'alyx_id': self.alyx_id})
+        _data.update({'responsible_user': self.alyx_responsible_user})
+        _data.update({'birth_date': self.alyx_birth_date})
+        _data.update({'age_weeks': self.alyx_age_weeks})
+        _data.update({'death_date': self.alyx_death_date})
+        _data.update({'species': self.alyx_species})
+        _data.update({'sex': self.alyx_sex})
+        _data.update({'litter': self.alyx_litter})
+        _data.update({'strain': self.alyx_strain})
+        _data.update({'source': self.alyx_source})
+        _data.update({'line': self.alyx_line})
+
+        _data.update({'projects': []})
+        for item in self.alyx_projects:
+            _data['projects'].append(item)
+
+        _data.update({'lab': self.alyx_lab})
+
+        _data.update({'genotype': []})
+        for item in self.alyx_genotype:
+            _data['genotype'].append(item)
+
+        _data.update({'description': self.alyx_description})
+
+        _data.update({'weighings': []})
+        for item in self.alyx_weighings:
+            _data['weighings'].append(str(item))
+
+        _data.update({'water_administrations': []})
+        for item in self.alyx_water_administrations:
+            _data['water_administrations'].append(str(item))
+
+        _data.update({'reference_weight': self.alyx_reference_weight})
+        _data.update({'last_water_restriction': self.alyx_last_water_restriction})
+        _data.update({'expected_water': self.alyx_expected_water})
+        _data.update({'remaining_water': self.alyx_remaining_water})
+
+        return _data
