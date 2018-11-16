@@ -3,12 +3,13 @@ import os
 
 import pybpodgui_api
 from pybpod_alyx_module.alyx_details import AlyxDetails
+from pybpodgui_plugin.models.subject import SubjectUIBusy
 from sca.formats import json
 
 logger = logging.getLogger(__name__)
 
 
-class AlyxSubject(object):
+class AlyxSubject(SubjectUIBusy):
 
     def __init__(self, project):
         super(AlyxSubject, self).__init__(project)
