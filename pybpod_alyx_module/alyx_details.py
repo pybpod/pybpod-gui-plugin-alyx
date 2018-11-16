@@ -1,3 +1,4 @@
+import pyforms
 from AnyQt import QtCore, QtGui
 from pybpod_alyx_module.module_api import AlyxModule
 from pyforms.basewidget import BaseWidget
@@ -9,7 +10,7 @@ class AlyxDetails(AlyxModule, BaseWidget):
     TITLE = 'Subject Details'
 
     def __init__(self, _subject=None):
-        BaseWidget.__init__(self, self.TITLE, parent_win=_subject.project)
+        BaseWidget.__init__(self, self.TITLE, parent_win=_subject.mainwindow)
         AlyxModule.__init__(self)
 
         self._nickname_text = ControlLabel('Nickname:')
@@ -135,3 +136,7 @@ class AlyxDetails(AlyxModule, BaseWidget):
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key_Escape:
             self.close()
+
+
+if __name__ == '__main__':
+    pyforms.start_app(AlyxDetails, geometry=(0, 0, 300, 300))
