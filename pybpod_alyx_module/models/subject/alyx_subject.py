@@ -19,23 +19,29 @@ class AlyxSubject(SubjectUIBusy):
         # print(self.uuid4)
         self.name = jsondata['nickname']
         self.alyx_nickname = jsondata['nickname']
-        self.alyx_id = jsondata['id']
         self.alyx_url = jsondata['url']
+        self.alyx_id = jsondata['id']
         self.alyx_responsible_user = jsondata['responsible_user']
         self.alyx_birth_date = jsondata['birth_date']
+        self.alyx_age_weeks = jsondata['age_weeks']
         self.alyx_death_date = jsondata['death_date']
         self.alyx_species = jsondata['species']
         self.alyx_sex = jsondata['sex']
         self.alyx_litter = jsondata['litter']
         self.alyx_strain = jsondata['strain']
+        self.alyx_source = jsondata['source']
         self.alyx_line = jsondata['line']
-        self.alyx_description = jsondata['description']
+        self.alyx_projects = jsondata['projects']
         self.alyx_lab = jsondata['lab']
         self.alyx_genotype = jsondata['genotype']
-        self.alyx_alive = "Yes" if self.alyx_death_date is None else "No"
-        self.alyx_projects = jsondata['projects']
+        self.alyx_description = jsondata['description']
+        self.alyx_weighings = jsondata['weighings']
+        self.alyx_water_administrations = jsondata['water_administrations']
+        self.alyx_reference_weight = jsondata['reference_weight']
+        self.alyx_last_water_restriction = jsondata['last_water_restriction']
+        self.alyx_expected_water = jsondata['expected_water']
+        self.alyx_remaining_water = jsondata['remaining_water']
 
-        # print(self.uuid4)
         if not hasattr(self, '_alyx_menu'):
             self._alyx_menu = self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
         self._name.readonly = True
@@ -68,21 +74,28 @@ class AlyxSubject(SubjectUIBusy):
                     def_text='This file contains information about a subject used on PyBpod GUI.',
                 )
             data['nickname'] = self.alyx_nickname
-            data['alyx_id'] = self.alyx_id
             data['url'] = self.alyx_url
+            data['alyx_id'] = self.alyx_id
             data['responsible_user'] = self.alyx_responsible_user
             data['birth_date'] = self.alyx_birth_date
+            data['age_weeks'] = self.alyx_age_weeks
             data['death_date'] = self.alyx_death_date
             data['species'] = self.alyx_species
             data['sex'] = self.alyx_sex
             data['litter'] = self.alyx_litter
             data['strain'] = self.alyx_strain
+            data['source'] = self.alyx_source
             data['line'] = self.alyx_line
-            data['description'] = self.alyx_description
+            data['projects'] = self.alyx_projects
             data['lab'] = self.alyx_lab
             data['genotype'] = self.alyx_genotype
-            data['alive'] = self.alyx_alive
-            data['projects'] = self.alyx_projects
+            data['description'] = self.alyx_description
+            data['weighings'] = self.alyx_weighings
+            data['water_administration'] = self.alyx_water_administrations
+            data['reference_weight'] = self.alyx_reference_weight
+            data['last_water_restriction'] = self.alyx_last_water_restriction
+            data['expected_water'] = self.alyx_expected_water
+            data['remaining_water'] = self.alyx_remaining_water
 
             config_path = os.path.join(self.path, self.name+'.json')
             with open(config_path, 'w') as fstream: json.dump(data, fstream)
@@ -100,21 +113,28 @@ class AlyxSubject(SubjectUIBusy):
         data['name'] = self.name
         data['uuid4'] = self.uuid4
         data['nickname'] = self.alyx_nickname
-        data['alyx_id'] = self.alyx_id
         data['url'] = self.alyx_url
+        data['alyx_id'] = self.alyx_id
         data['responsible_user'] = self.alyx_responsible_user
         data['birth_date'] = self.alyx_birth_date
+        data['age_weeks'] = self.alyx_age_weeks
         data['death_date'] = self.alyx_death_date
         data['species'] = self.alyx_species
         data['sex'] = self.alyx_sex
         data['litter'] = self.alyx_litter
         data['strain'] = self.alyx_strain
+        data['source'] = self.alyx_source
         data['line'] = self.alyx_line
-        data['description'] = self.alyx_description
+        data['projects'] = self.alyx_projects
         data['lab'] = self.alyx_lab
         data['genotype'] = self.alyx_genotype
-        data['alive'] = self.alyx_alive
-        data['projects'] = self.alyx_projects
+        data['description'] = self.alyx_description
+        data['weighings'] = self.alyx_weighings
+        data['water_administration'] = self.alyx_water_administrations
+        data['reference_weight'] = self.alyx_reference_weight
+        data['last_water_restriction'] = self.alyx_last_water_restriction
+        data['expected_water'] = self.alyx_expected_water
+        data['remaining_water'] = self.alyx_remaining_water
 
         return json.dumps(data)
 
@@ -136,24 +156,30 @@ class AlyxSubject(SubjectUIBusy):
                 super().load(path)
                 return
 
-            #self.name = data.get('name', None)
             self.uuid4 = data.uuid4 if data.uuid4 else self.uuid4
             self.alyx_nickname = data.get('nickname', None)
-            self.alyx_id = data.get('alyx_id', None)
             self.alyx_url = data.get('url', None)
+            self.alyx_id = data.get('alyx_id', None)
             self.alyx_responsible_user = data.get('responsible_user', None)
             self.alyx_birth_date = data.get('birth_date', None)
+            self.alyx_age_weeks = data.get('age_weeks', None)
             self.alyx_death_date = data.get('death_date', None)
             self.alyx_species = data.get('species', None)
             self.alyx_sex = data.get('sex', None)
             self.alyx_litter = data.get('litter', None)
             self.alyx_strain = data.get('strain', None)
+            self.alyx_source = data.get('source', None)
             self.alyx_line = data.get('line', None)
-            self.alyx_description = data.get('description', None)
+            self.alyx_projects = data.get('projects', None)
             self.alyx_lab = data.get('lab', None)
             self.alyx_genotype = data.get('genotype', None)
-            self.alyx_alive = data.get('alive', None)
-            self.alyx_projects = data.get('projects', None)
+            self.alyx_description = data.get('description', None)
+            self.alyx_weighings = data.get('weighings', None)
+            self.alyx_water_administrations = data.get('water_administrations', None)
+            self.alyx_reference_weight = data.get('reference_weight', None)
+            self.alyx_last_water_restriction = data.get('last_water_restriction', None)
+            self.alyx_expected_water = data.get('expected_water', None)
+            self.alyx_remaining_water = data.get('remaining_water', None)
 
             self._alyx_menu = self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
             self._name.readonly = True
@@ -191,40 +217,3 @@ class AlyxSubject(SubjectUIBusy):
             self.detailswindow = AlyxDetails(self)
         self.detailswindow.show()
         return self.detailswindow
-
-'''
-test_subject = {
-    "nickname": "test_subject_posted",
-    "responsible_user": "test_user",  # Required
-    "birth_date": None,
-    "death_date": None,
-    "species": None,
-    "sex": 'U',  # Required
-    "litter": None,
-    "strain": None,
-    "line": None,
-    "description": "Some description",
-    "genotype": []  # Required?
-}
-'''
-
-'''
-{
-    'species': 'mouse', 
-    'genotype': [], 
-    'litter': None, 
-    'alive': True, 
-    'url': 'http://alyx.champalimaud.pt:8000/subjects/4577', 
-    'line': None, 
-    'birth_date': '2017-04-11', 
-    'responsible_user': 'ines', 
-    'sex': 'F', 
-    'death_date': None, 
-    'description': '', 
-    'nickname': '4577', 
-    'strain': 'VGlut-2-ChR2-het', 
-    'id': '27705345-f49a-4483-aec8-313fc01d2c1f'
-} 
-
-
-'''     
