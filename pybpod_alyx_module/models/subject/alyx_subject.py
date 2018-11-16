@@ -32,11 +32,12 @@ class AlyxSubject(SubjectUIBusy):
         self.alyx_description = jsondata['description']
         self.alyx_lab = jsondata['lab']
         self.alyx_genotype = jsondata['genotype']
-        self.alyx_alive = jsondata['alive']
+        self.alyx_alive = "Yes" if self.alyx_death_date is None else "No"
         self.alyx_projects = jsondata['projects']
 
         # print(self.uuid4)
-        self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
+        if not hasattr(self, '_alyx_menu'):
+            self._alyx_menu = self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
         self._name.readonly = True
 
     def save(self):
@@ -154,7 +155,7 @@ class AlyxSubject(SubjectUIBusy):
             self.alyx_alive = data.get('alive', None)
             self.alyx_projects = data.get('projects', None)
 
-            self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
+            self._alyx_menu = self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
             self._name.readonly = True
 
         except:
