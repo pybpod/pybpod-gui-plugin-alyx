@@ -32,10 +32,10 @@ class Get():
 
     def bynickname(self, name):
         print('getting subject by nickname')
-        result = requests.get(self.apibase.addr + '/subjects'+'/'+name,headers= self.apibase.headers)
+        result = requests.get(self.apibase.addr + '/subjects'+'/'+name, headers=self.apibase.headers)
         if result.ok:
             result_data = result.json()
-            print(result_data)
+            return result_data
 
     def alive(self, _alive):
         print('getting alive =',_alive,'subjects')
