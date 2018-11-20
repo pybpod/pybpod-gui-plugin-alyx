@@ -3,6 +3,9 @@
 
 from setuptools import setup, find_packages
 
+requirements = [
+	'requests'
+]
 
 setup(
 	name='pybpod-gui-plugin-alyx',
@@ -16,5 +19,7 @@ setup(
 	include_package_data=True,
 	packages=find_packages(),
 
-	package_data={'pybpod_alyx_module': ['resources/*.*',]}
+	package_data={'pybpod_alyx_module': ['resources/*.*',]},
+
+	install_requires = requirements,
 )
