@@ -21,15 +21,15 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         self._addressbox = ControlText('Address')
         self._username = ControlText('User:')
         self._password = ControlText('Password:')
-        self._username = ControlText('User:',default = 'luis')
-        self._password = ControlText('Password:', default = 'BulbTop58')
+        self._username = ControlText('User:',default = conf.ALYX_PLUGIN_USERNAME)
+        self._password = ControlText('Password:', default = conf.ALYX_PLUGIN_PASSWORD)
         self._connect_btn = ControlButton('Connect',default = self._connect)
         self._status_lbl = ControlLabel('Status: Not Connected')
         self._getsubjects_btn = ControlButton('Get Subjects', default = self._get_subjects)
         self._getsubjects_btn.enabled = False
         self.set_margin(10)
 
-        self._addressbox.value = conf.ALYX_ADDR
+        self._addressbox.value = conf.ALYX_PLUGIN_ADDRESS
         self._addressbox.changed_event = self.setaddr
 
         if self.project.loggeduser is not None:

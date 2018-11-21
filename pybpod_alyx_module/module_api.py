@@ -20,5 +20,4 @@ class AlyxModule(object):
         return self.api.getaddr()
     
     def set_alyx_address(self,value):
-        print('setting addr',value)
         self.api.setaddr(value)

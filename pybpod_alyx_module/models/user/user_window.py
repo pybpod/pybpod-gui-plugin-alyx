@@ -22,8 +22,6 @@ class UserWindow(User, AlyxModule, BaseWidget):
         
         self._namebox = ControlText('User:')
         self._password = ControlText('Password:')
-        #self._namebox = ControlText('User:',default = 'test_user')
-        #self._password = ControlText('Password:', default = 'test')
         self._connect_btn = ControlButton('Connect',default = self._connect)
         self._status_lbl = ControlLabel('Status: Not Connected')
         self._getsubjects_btn = ControlButton('Get Subjects', default = self._get_subjects)
@@ -48,16 +46,12 @@ class UserWindow(User, AlyxModule, BaseWidget):
 
     def _connect(self):
         if self._connect_to_alyx(self._namebox.value,self._password.value):
-            print('COnnected')
             self._status_lbl.value = 'Status: CONNECTED'
-        else:
-            print('NOT CONNECTED')
 
     def _get_subjects(self):
         result = self.get_alyx_subjects(self._name)
         for subj in result:
             subjname = subj['nickname']
-            print('adding subject to project')
             existing = False
             for s in self.project.subjects:
                 if s.name == subjname:
@@ -66,11 +60,9 @@ class UserWindow(User, AlyxModule, BaseWidget):
                     if reply == 'yes':
                         s.add_alyx_info(subj)
             if existing == False:
-                print('ADDING NEW SUBJECT')
                 newsubject = AlyxSubject(self.project)
                 newsubject.add_alyx_info(subj)
-                self.project += newsubject
-    
+
     
     def __name_changed_evt(self):
         if not hasattr(self, '_update_name') or not self._update_name:

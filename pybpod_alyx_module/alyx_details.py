@@ -86,7 +86,7 @@ class AlyxDetails(AlyxModule, BaseWidget):
         self._weighings.selectable = True
 
         self._reference_weight_text = ControlLabel('Reference weight:')
-        self._reference_weight = ControlLabel(_subject.alyx_reference_weight)
+        self._reference_weight = ControlLabel(str(_subject.alyx_reference_weight))
         self._reference_weight.selectable = True
 
         self._water_administrations_text = ControlLabel('Water admninistrations:')
