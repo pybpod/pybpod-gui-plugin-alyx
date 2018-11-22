@@ -98,7 +98,7 @@ class AlyxSubject(SubjectUIBusy):
             self._name.readonly = True
 
         except:
-            raise Exception(f'There was an error loading the configuration file for the subject [{self.name}]. File not found.')
+            raise Exception('There was an error loading the configuration file for the subject [{name}]. File not found.'.format(name=self.name))
 
     def _get_alyx_members_from_json(self, data):
         self.alyx_nickname = data.get('nickname', None)

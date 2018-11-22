@@ -13,7 +13,7 @@ class UserWindow(User, AlyxModule, BaseWidget):
 
     TITLE = 'Alyx connection'
 
-    def __init__(self, _project : Project):
+    def __init__(self, _project):
         BaseWidget.__init__(self, self.TITLE)
         AlyxModule.__init__(self)
         User.__init__(self, _project)
