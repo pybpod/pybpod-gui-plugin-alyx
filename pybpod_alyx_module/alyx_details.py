@@ -2,7 +2,7 @@ import pyforms
 from AnyQt import QtCore, QtGui
 from pybpod_alyx_module.module_api import AlyxModule
 from pyforms.basewidget import BaseWidget
-from pyforms.controls import ControlLabel
+from pyforms.controls import ControlList
 
 
 class AlyxDetails(AlyxModule, BaseWidget):
@@ -13,101 +13,37 @@ class AlyxDetails(AlyxModule, BaseWidget):
         BaseWidget.__init__(self, self.TITLE, parent_win=_subject.mainwindow)
         AlyxModule.__init__(self)
 
-        self._nickname_text = ControlLabel('Nickname:')
-        self._nickname = ControlLabel(_subject.name, selectable=True)
-
-        # self._url_text = ControlLabel('URL:')
-        # self._url = ControlLabel(_subject.alyx_url, selectable=True)
-
-        self._id_text = ControlLabel('ID:')
-        self._id = ControlLabel(_subject.alyx_id, selectable=True)
-
-        self._responsible_user_text = ControlLabel('Responsible user:')
-        self._responsible_user = ControlLabel(_subject.alyx_responsible_user, selectable=True)
-
-        self._birth_text = ControlLabel('Birth date:')
-        self._birth = ControlLabel(_subject.alyx_birth_date, selectable=True)
-
-        self._age_weeks_text = ControlLabel('Age (weeks):')
-        self._age_weeks = ControlLabel(str(_subject.alyx_age_weeks), selectable=True)
-
-        self._death_text = ControlLabel('Death date:')
-        self._death = ControlLabel(_subject.alyx_death_date, selectable=True)
-
-        self._species_text = ControlLabel('Species:')
-        self._species = ControlLabel(_subject.alyx_species, selectable=True)
-
-        self._sex_text = ControlLabel('Sex:')
-        self._sex = ControlLabel(_subject.alyx_species, selectable=True)
-
-        self._litter_text = ControlLabel('Litter:')
-        self._litter = ControlLabel(_subject.alyx_litter, selectable=True)
-
-        self._strain_text = ControlLabel('Strain:')
-        self._strain = ControlLabel(_subject.alyx_strain, selectable=True)
-
-        self._source_text = ControlLabel('Source:')
-        self._source = ControlLabel(_subject.alyx_source, selectable=True)
-
-        self._line_text = ControlLabel('Line:')
-        self._line = ControlLabel(_subject.alyx_line, selectable=True)
-
-        self._projects_text = ControlLabel('Projects:')
-        self._projects = ControlLabel(", ".join(map(str, _subject.alyx_projects)) if _subject.alyx_projects else None, selectable=True)
-
-        self._lab_text = ControlLabel('Lab:')
-        self._lab = ControlLabel(_subject.alyx_lab, selectable=True)
-
-        self._genotype_text = ControlLabel('Genotype:')
-        self._genotype = ControlLabel(", ".join(map(str, _subject.alyx_genotype)) if _subject.alyx_genotype else None, selectable=True)
-
-        self._description_text = ControlLabel('Description:')
-        self._description = ControlLabel(_subject.alyx_description, selectable=True)
-
-        self._weighings_text = ControlLabel('Weighings:')
-        self._weighings = ControlLabel(", ".join(map(str, _subject.alyx_weighings)) if _subject.alyx_weighings else None, selectable=True)
-
-        self._reference_weight_text = ControlLabel('Reference weight:')
-        self._reference_weight = ControlLabel(str(_subject.alyx_reference_weight), selectable=True)
-
-        self._water_administrations_text = ControlLabel('Water admninistrations:')
-        self._water_administrations = ControlLabel(", ".join(map(str, _subject.alyx_water_administrations)) if _subject.alyx_water_administrations else None, selectable=True)
-
-        self._last_water_restriction_text = ControlLabel('Last water restriction:')
-        self._last_water_restriction = ControlLabel(_subject.alyx_last_water_restriction, selectable=True)
-
-        self._expected_water_text = ControlLabel('Expected water:')
-        self._expected_water = ControlLabel(str(_subject.alyx_expected_water), selectable=True)
-
-        self._remaining_water_text = ControlLabel('Remaining water:')
-        self._remaining_water = ControlLabel(str(_subject.alyx_remaining_water), selectable=True)
+        self._details_list = ControlList('Alyx subject details', readonly=True)
+        self._details_list += ('Nickname', _subject.name)
+        #self._details_list += ('URL', _subject.alyx_url)
+        self._details_list += ('ID', _subject.alyx_id)
+        self._details_list += ('Responsible user', _subject.alyx_responsible_user)
+        self._details_list += ('Birth date', _subject.alyx_birth_date)
+        self._details_list += ('Age (weeks)', _subject.alyx_age_weeks)
+        self._details_list += ('Death date', _subject.alyx_death_date)
+        self._details_list += ('Species', _subject.alyx_species)
+        self._details_list += ('Sex', _subject.alyx_sex)
+        self._details_list += ('Litter', _subject.alyx_litter)
+        self._details_list += ('Strain', _subject.alyx_strain)
+        self._details_list += ('Source', _subject.alyx_source)
+        self._details_list += ('Line', _subject.alyx_line)
+        self._details_list += ('Projects', ", ".join(map(str, _subject.alyx_projects)) if _subject.alyx_projects else None)
+        self._details_list += ('Lab', _subject.alyx_lab)
+        self._details_list += ('Genotype', ", ".join(map(str, _subject.alyx_genotype)) if _subject.alyx_genotype else None)
+        self._details_list += ('Description', _subject.alyx_description)
+        #self._details_list += ('Weighings', ", ".join(map(str, _subject.alyx_weighings)) if _subject.alyx_weighings else None)
+        #self._details_list += ('Reference weight', _subject.alyx_reference_weight)
+        #self._details_list += ('Water administrations', ", ".join(map(str, _subject.alyx_water_administrations)) if _subject.alyx_water_administrations else None)
+        #self._details_list += ('Last water restriction', _subject.alyx_last_water_restriction)
+        #self._details_list += ('Expected water', _subject.alyx_expected_water)
+        #self._details_list += ('Remaining water', _subject.alyx_remaining_water)
 
         self.set_margin(10)
+        self.setMinimumWidth(500)
+        self.setMinimumHeight(540)
 
         self.formset = [
-            ('_nickname_text', '_nickname'),
-            # ('_url_text', '_url'),
-            ('_id_text', '_id'),
-            ('_responsible_user_text', '_responsible_user'),
-            ('_birth_text', '_birth'),
-            ('_age_weeks_text', '_age_weeks'),
-            ('_death_text', '_death'),
-            ('_species_text', '_species'),
-            ('_sex_text', '_sex'),
-            ('_litter_text', '_litter'),
-            ('_strain_text', '_strain'),
-            ('_source_text', '_source'),
-            ('_line_text', '_line'),
-            ('_projects_text', '_projects'),
-            ('_lab_text', '_lab'),
-            ('_genotype_text', '_genotype'),
-            ('_description_text', '_description'),
-            ('_weighings_text', '_weighings'),
-            ('_reference_weight_text', '_reference_weight'),
-            ('_water_administrations_text', '_water_administrations'),
-            ('_last_water_restriction_text', '_last_water_restriction'),
-            ('_expected_water_text', '_expected_water'),
-            ('_remaining_water_text', '_remaining_water'),
+            '_details_list'
         ]
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
