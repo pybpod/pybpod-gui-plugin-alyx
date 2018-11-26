@@ -2,7 +2,7 @@ import requests
 import json
 from confapp import conf
 
-ENDPOINT = conf.ALYX_ADDR+'/subjects'
+ENDPOINT = conf.ALYX_PLUGIN_ADDRESS+'/subjects'
 
 class Post():
 

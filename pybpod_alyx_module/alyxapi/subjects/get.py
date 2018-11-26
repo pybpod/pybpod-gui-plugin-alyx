@@ -2,7 +2,7 @@ import requests
 import json
 from confapp import conf
 
-#self.apibase.addr + '/subjects' = conf.ALYX_ADDR+'/subjects'
+#self.apibase.addr + '/subjects' = conf.ALYX_PLUGIN_ADDRESS+'/subjects'
 
 class Get():
 
@@ -11,7 +11,6 @@ class Get():
         
 
     def allsubjects(self):
-        print('getting subjects')
         result = requests.get(self.apibase.addr + '/subjects',headers=self.apibase.headers)
         if result.ok:
             result_data = result.json()
@@ -21,7 +20,6 @@ class Get():
 
     
     def usersubjects(self, username):
-        print('getting subjects')
         result = requests.get(self.apibase.addr + '/subjects?responsible_user=' + username, headers=self.apibase.headers)
         if result.ok:
             result_data = result.json()
@@ -31,14 +29,12 @@ class Get():
 
 
     def bynickname(self, name):
-        print('getting subject by nickname')
-        result = requests.get(self.apibase.addr + '/subjects'+'/'+name,headers= self.apibase.headers)
+        result = requests.get(self.apibase.addr + '/subjects'+'/'+name, headers=self.apibase.headers)
         if result.ok:
             result_data = result.json()
-            print(result_data)
+            return result_data
 
     def alive(self, _alive):
-        print('getting alive =',_alive,'subjects')
         _data = dict(alive= _alive)
         result = requests.get(self.apibase.addr + '/subjects',headers= self.apibase.headers,data = _data)
         if result.ok:
@@ -46,7 +42,6 @@ class Get():
             print(result.json())
 
     def stock(self, _stock):
-        print('getting stock =',_stock,'subjects')
         _data = dict(stock= _stock)
         result = requests.get(self.apibase.addr + '/subjects',headers= self.apibase.headers,data = _data)
         if result.ok:
@@ -54,7 +49,6 @@ class Get():
             print(result.json())
     
     def water_restircted(self, _water_restircted):
-        print('getting water restricted =',_water_restircted,'subjects')
         _data = dict(water_restircted= _water_restircted)
         result = requests.get(self.apibase.addr + '/subjects',headers= self.apibase.headers,data = _data)
         if result.ok:

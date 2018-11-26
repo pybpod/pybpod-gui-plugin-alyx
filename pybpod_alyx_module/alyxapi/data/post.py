@@ -10,4 +10,4 @@ class Post():
     def registerfile(self, _path, _dns, _created_by, _filenames, _projects):
         _data = dict(path = _path, dns = _dns, created_by = _created_by, filenames = _filenames, projects = _projects)
         
-        #requests.post(conf.ALYX_ADDR + '/register-file',headers = self.apibase.headers, data = _data)
+        #requests.post(conf.ALYX_PLUGIN_ADDRESS + '/register-file',headers = self.apibase.headers, data = _data)

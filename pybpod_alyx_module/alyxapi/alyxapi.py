@@ -10,7 +10,7 @@ class AlyxAPI():
         self._logged = False
         self.subjects = Subjects(self)
         self.data = Data(self)
-        self.addr = conf.ALYX_ADDR
+        self.addr = conf.ALYX_PLUGIN_ADDRESS
         #self.serveraddr = 'http://alyx.champalimaud.pt:8000'
         #self.auth_endpoint = '/auth-token/'
 

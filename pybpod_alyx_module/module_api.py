@@ -12,10 +12,12 @@ class AlyxModule(object):
     
     def get_alyx_subjects(self, username):
         return self.api.subjects.get.usersubjects(username)
+
+    def get_alyx_subject_info(self, nickname):
+        return self.api .subjects.get.bynickname(nickname)
     
     def get_alyx_address(self):
         return self.api.getaddr()
     
     def set_alyx_address(self,value):
-        print('setting addr',value)
         self.api.setaddr(value)

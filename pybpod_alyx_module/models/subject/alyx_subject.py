@@ -1,43 +1,27 @@
-import os
 import logging
-import glob
-import hashlib, pybpodgui_api
-from AnyQt.QtGui import QIcon
-from confapp import conf
-from pybpodgui_api.utils.send2trash_wrapper import send2trash
-from sca.formats import json
-from pybpodgui_api.models.project.project_base import ProjectBase
-from pybpodgui_api.exceptions.api_error import APIError
+import os
 
-from pybpodgui_plugin.models.subject.subject_uibusy import SubjectUIBusy
-
+import pybpodgui_api
 from pybpod_alyx_module.alyx_details import AlyxDetails
+from pybpodgui_plugin.models.subject import SubjectUIBusy
+from sca.formats import json
+
+logger = logging.getLogger(__name__)
+
 
 class AlyxSubject(SubjectUIBusy):
 
-    def __init__(self,project):
+    def __init__(self, project):
         super(AlyxSubject, self).__init__(project)
 
-    def add_alyx_info(self,jsondata):
-        print(json.dumps(jsondata))
-        print(self.uuid4)
-        self.name = jsondata['nickname']
-        self.alyx_nickname = jsondata['nickname']
-        self.alyx_id = jsondata['id']
-        self.alyx_species = jsondata['species']
-        self.alyx_genotype = jsondata['genotype']
-        self.alyx_litter = jsondata['litter']
-        self.alyx_alive = jsondata['alive']
-        self.alyx_url = jsondata['url']
-        self.alyx_line = jsondata['line']
-        self.alyx_birth_date = jsondata['birth_date']
-        self.alyx_responsible_user = jsondata['responsible_user']
-        self.alyx_sex = jsondata['sex']
-        self.alyx_death_date = jsondata['death_date']
-        self.alyx_description = jsondata['description']
-        self.alyx_strain = jsondata['strain']
-        print(self.uuid4)
-        
+    def add_alyx_info(self, jsondata):
+        self.name = jsondata.get('nickname', None)
+        self.alyx_id = jsondata.get('id', None)
+        self._get_alyx_members_from_json(jsondata)
+
+        if not hasattr(self, '_alyx_menu'):
+            self._alyx_menu = self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
+        self._name.readonly = True
 
     def save(self):
         """
@@ -47,6 +31,10 @@ class AlyxSubject(SubjectUIBusy):
         :return: Dictionary containing the setup info to save.  
         :rtype: dict
         """
+        if not hasattr(self, 'alyx_id'):
+            super().save()
+            return
+
         if not self.name:
             logger.warning("Skipping subject without name")
             return None
@@ -62,82 +50,104 @@ class AlyxSubject(SubjectUIBusy):
                     def_url ='http://pybpod.readthedocs.org',
                     def_text='This file contains information about a subject used on PyBpod GUI.',
                 )
-            data['nickname'] = self.alyx_nickname
-            data['alyx_id'] = self.alyx_id
-            data['species'] = self.alyx_species
-            data['genotype'] = self.alyx_genotype
-            data['litter'] = self.alyx_litter
-            data['alive'] = self.alyx_alive
-            data['url'] = self.alyx_url
-            data['line'] = self.alyx_line
-            data['birth_date'] = self.alyx_birth_date
-            data['responsible_user'] = self.alyx_responsible_user
-            data['sex'] = self.alyx_sex
-            data['death_date'] = self.alyx_death_date
-            data['description'] = self.alyx_description
-            data['strain'] = self.alyx_strain
+
+            self._save_alyx_member_to_json(data)
 
             config_path = os.path.join(self.path, self.name+'.json')
             with open(config_path, 'w') as fstream: json.dump(data, fstream)
 
     def toJSON(self):
+        if not hasattr(self, 'alyx_id'):
+            return super().toJSON()
+
         data = json.scadict(
                     uuid4_id=self.uuid4,
                     software='PyBpod GUI API v'+str(pybpodgui_api.__version__),
                     def_url ='http://pybpod.readthedocs.org',
                     def_text='This file contains information about a subject used on PyBpod GUI.',
                 )
+
         data['name'] = self.name
         data['uuid4'] = self.uuid4
-        data['nickname'] = self.alyx_nickname
-        data['alyx_id'] = self.alyx_id
-        data['species'] = self.alyx_species
-        data['genotype'] = self.alyx_genotype
-        data['litter'] = self.alyx_litter
-        data['alive'] = self.alyx_alive
-        data['url'] = self.alyx_url
-        data['line'] = self.alyx_line
-        data['birth_date'] = self.alyx_birth_date
-        data['responsible_user'] = self.alyx_responsible_user
-        data['sex'] = self.alyx_sex
-        data['death_date'] = self.alyx_death_date
-        data['description'] = self.alyx_description
-        data['strain'] = self.alyx_strain
+        self._save_alyx_member_to_json(data)
 
         return json.dumps(data)
 
     def load(self, path):
         """
-        Load sebject data from filesystem
+        Load subject data from filesystem
 
         :ivar str subject_path: Path of the subject
         :ivar dict data: data object that contains all subject info
         """
-        print('LOADING SUBJECT ALYX')
         self.name  = os.path.basename(path)
 
         try:
             with open( os.path.join(self.path, self.name+'.json'), 'r' ) as stream:
                 self.data = data = json.load(stream)
-            
-            self.alyx_nickname = data['nickname'] if 'nickname' in data.keys() else None
+
+            if data.get('alyx_id', None) is None:
+                super().load(path)
+                return
+
             self.uuid4 = data.uuid4 if data.uuid4 else self.uuid4
-            self.alyx_id = data['alyx_id'] if 'alyx_id' in data.keys() else None
-            self.alyx_species = data['species'] if 'species' in data.keys() else None
-            self.alyx_genotype = data['genotype'] if 'genotype' in data.keys() else None
-            self.alyx_litter = data['litter'] if 'litter' in data.keys() else None
-            self.alyx_alive = data['alive'] if 'alive' in data.keys() else None
-            self.alyx_url = data['url'] if 'url' in data.keys() else None
-            self.alyx_line = data['line'] if 'line' in data.keys() else None
-            self.alyx_birth_date = data['birth_date'] if 'birth_date' in data.keys() else None
-            self.alyx_responsible_user = data['responsible_user'] if 'responsible_user' in data.keys() else None
-            self.alyx_sex = data['sex'] if 'sex' in data.keys() else None
-            self.alyx_death_date = data['death_date'] if 'death_date' in data.keys() else None
-            self.alyx_description = data['description'] if 'description' in data.keys() else None
-            self.alyx_strain = data['strain'] if 'strain' in data.keys() else None
+            self.alyx_id = data.get('alyx_id', None)
+            self._get_alyx_members_from_json(data)
+
+            self._alyx_menu = self._tree.add_popup_menu_option('Alyx Details', self.showdetails, item=self.node)
+            self._name.readonly = True
 
         except:
-            raise Exception('There was an error loading the configuration file for the subject [{0}]')
+            raise Exception('There was an error loading the configuration file for the subject [{name}]. File not found.'.format(name=self.name))
+
+    def _get_alyx_members_from_json(self, data):
+        self.alyx_nickname = data.get('nickname', None)
+        self.alyx_url = data.get('url', None)
+        self.alyx_responsible_user = data.get('responsible_user', None)
+        self.alyx_birth_date = data.get('birth_date', None)
+        self.alyx_age_weeks = data.get('age_weeks', None)
+        self.alyx_death_date = data.get('death_date', None)
+        self.alyx_species = data.get('species', None)
+        self.alyx_sex = data.get('sex', None)
+        self.alyx_litter = data.get('litter', None)
+        self.alyx_strain = data.get('strain', None)
+        self.alyx_source = data.get('source', None)
+        self.alyx_line = data.get('line', None)
+        self.alyx_projects = data.get('projects', [])
+        self.alyx_lab = data.get('lab', None)
+        self.alyx_genotype = data.get('genotype', [])
+        self.alyx_description = data.get('description', None)
+        self.alyx_weighings = data.get('weighings', [])
+        self.alyx_water_administrations = data.get('water_administrations', [])
+        self.alyx_reference_weight = data.get('reference_weight', None)
+        self.alyx_last_water_restriction = data.get('last_water_restriction', None)
+        self.alyx_expected_water = data.get('expected_water', None)
+        self.alyx_remaining_water = data.get('remaining_water', None)
+
+    def _save_alyx_member_to_json(self, data):
+        data['nickname'] = self.alyx_nickname
+        data['url'] = self.alyx_url
+        data['alyx_id'] = self.alyx_id
+        data['responsible_user'] = self.alyx_responsible_user
+        data['birth_date'] = self.alyx_birth_date
+        data['age_weeks'] = self.alyx_age_weeks
+        data['death_date'] = self.alyx_death_date
+        data['species'] = self.alyx_species
+        data['sex'] = self.alyx_sex
+        data['litter'] = self.alyx_litter
+        data['strain'] = self.alyx_strain
+        data['source'] = self.alyx_source
+        data['line'] = self.alyx_line
+        data['projects'] = self.alyx_projects
+        data['lab'] = self.alyx_lab
+        data['genotype'] = self.alyx_genotype
+        data['description'] = self.alyx_description
+        data['weighings'] = self.alyx_weighings
+        data['water_administration'] = self.alyx_water_administrations
+        data['reference_weight'] = self.alyx_reference_weight
+        data['last_water_restriction'] = self.alyx_last_water_restriction
+        data['expected_water'] = self.alyx_expected_water
+        data['remaining_water'] = self.alyx_remaining_water
 
     def create_treenode(self, tree):
         """
@@ -157,53 +167,62 @@ class AlyxSubject(SubjectUIBusy):
         :return: new created node
         :return type: QTreeWidgetItem
         """
-        self.node 						= tree.create_child(self.name, self.project.subjects_node, icon=QIcon(conf.SUBJECT_SMALL_ICON))
-        self.node.key_pressed_event 	= self.node_key_pressed_event
-        self.node.window 				= self
-        self.node.setExpanded(True)
+        super().create_treenode(tree)
 
-        tree.add_popup_menu_option('Remove', self.remove, item=self.node, icon=QIcon(conf.REMOVE_SMALL_ICON))
-        tree.add_popup_menu_option('Alyx Details', self.showdetails, item = self.node)
+        # save the tree so we can add the pop-up on load and add_alyx_info for those subjects that require it
+        self._tree = tree
+
         return self.node
 
     def showdetails(self):
         if not hasattr(self, 'detailswindow'):
             self.detailswindow = AlyxDetails(self)
         self.detailswindow.show()
+        return self.detailswindow
 
-'''
-test_subject = {
-    "nickname": "test_subject_posted",
-    "responsible_user": "test_user",  # Required
-    "birth_date": None,
-    "death_date": None,
-    "species": None,
-    "sex": 'U',  # Required
-    "litter": None,
-    "strain": None,
-    "line": None,
-    "description": "Some description",
-    "genotype": []  # Required?
-}
-'''
+    def collect_data(self, data):
+        _data = super().collect_data(data)
 
-'''
-{
-    'species': 'mouse', 
-    'genotype': [], 
-    'litter': None, 
-    'alive': True, 
-    'url': 'http://alyx.champalimaud.pt:8000/subjects/4577', 
-    'line': None, 
-    'birth_date': '2017-04-11', 
-    'responsible_user': 'ines', 
-    'sex': 'F', 
-    'death_date': None, 
-    'description': '', 
-    'nickname': '4577', 
-    'strain': 'VGlut-2-ChR2-het', 
-    'id': '27705345-f49a-4483-aec8-313fc01d2c1f'
-} 
+        if not hasattr(self, 'alyx_id'):
+            return _data
 
+        _data.update({'nickname': self.alyx_nickname})
+        _data.update({'url': self.alyx_url})
+        _data.update({'alyx_id': self.alyx_id})
+        _data.update({'responsible_user': self.alyx_responsible_user})
+        _data.update({'birth_date': self.alyx_birth_date})
+        _data.update({'age_weeks': self.alyx_age_weeks})
+        _data.update({'death_date': self.alyx_death_date})
+        _data.update({'species': self.alyx_species})
+        _data.update({'sex': self.alyx_sex})
+        _data.update({'litter': self.alyx_litter})
+        _data.update({'strain': self.alyx_strain})
+        _data.update({'source': self.alyx_source})
+        _data.update({'line': self.alyx_line})
 
-'''     
+        _data.update({'projects': []})
+        for item in self.alyx_projects:
+            _data['projects'].append(item)
+
+        _data.update({'lab': self.alyx_lab})
+
+        _data.update({'genotype': []})
+        for item in self.alyx_genotype:
+            _data['genotype'].append(item)
+
+        _data.update({'description': self.alyx_description})
+
+        _data.update({'weighings': []})
+        for item in self.alyx_weighings:
+            _data['weighings'].append(str(item))
+
+        _data.update({'water_administrations': []})
+        for item in self.alyx_water_administrations:
+            _data['water_administrations'].append(str(item))
+
+        _data.update({'reference_weight': self.alyx_reference_weight})
+        _data.update({'last_water_restriction': self.alyx_last_water_restriction})
+        _data.update({'expected_water': self.alyx_expected_water})
+        _data.update({'remaining_water': self.alyx_remaining_water})
+
+        return _data
