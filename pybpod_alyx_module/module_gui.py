@@ -65,16 +65,31 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
 
     def _get_subjects(self):
         result = self.get_alyx_subjects(self._username.value)
+        replace_all = False
+        ignore_all = False
         for subj in result:
             subjname = subj['nickname']
             existing = False
             for s in self.project.subjects:
                 if s.name == subjname:
                     existing = True
-                    reply = self.question("Subject '{name}' already exists locally. Replace local details?".format(name=s.name), 'Update Subject')
+                    if replace_all:
+                        subj_info = self.get_alyx_subject_info(subjname)
+                        s.add_alyx_info(subj_info)
+                        continue
+                    reply = self.question("Subject '{name}' already exists locally. Replace local details?".format(name=s.name), 'Update Subject', buttons=['no', 'yes', 'no_all', 'yes_all'])
                     if reply == 'yes':
                         subj_info = self.get_alyx_subject_info(subjname)
                         s.add_alyx_info(subj_info)
+                    if reply == 'yes_all':
+                        subj_info = self.get_alyx_subject_info(subjname)
+                        s.add_alyx_info(subj_info)
+                        replace_all = True
+                    if reply == 'no_all':
+                        ignore_all = True
+                        break
+            if ignore_all:
+                break
             if not existing:
                 subj_info = self.get_alyx_subject_info(subjname)
                 # SubjectBase constructor adds Subject automatically to self.project so there's no need to add it here
