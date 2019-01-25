@@ -77,7 +77,8 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
                         subj_info = self.get_alyx_subject_info(subjname)
                         s.add_alyx_info(subj_info)
                         continue
-                    reply = self.question("Subject '{name}' already exists locally. Replace local details?".format(name=s.name), 'Update Subject', buttons=['no', 'yes', 'no_all', 'yes_all'])
+                    reply = self.question("Subject '{name}' already exists locally. Replace local details?".format(name=s.name),
+                                          'Update Subject', buttons=['no', 'yes', 'no_all', 'yes_all'])
                     if reply == 'yes':
                         subj_info = self.get_alyx_subject_info(subjname)
                         s.add_alyx_info(subj_info)

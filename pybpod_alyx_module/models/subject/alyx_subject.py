@@ -117,6 +117,7 @@ class AlyxSubject(SubjectUIBusy):
         self.alyx_lab = data.get('lab', None)
         self.alyx_genotype = data.get('genotype', [])
         self.alyx_description = data.get('description', None)
+        self.alyx_alive = data.get('alive', None)
         self.alyx_weighings = data.get('weighings', [])
         self.alyx_water_administrations = data.get('water_administrations', [])
         self.alyx_reference_weight = data.get('reference_weight', None)
@@ -142,6 +143,7 @@ class AlyxSubject(SubjectUIBusy):
         data['lab'] = self.alyx_lab
         data['genotype'] = self.alyx_genotype
         data['description'] = self.alyx_description
+        data['alive'] = self.alyx_alive
         data['weighings'] = self.alyx_weighings
         data['water_administration'] = self.alyx_water_administrations
         data['reference_weight'] = self.alyx_reference_weight
@@ -211,6 +213,7 @@ class AlyxSubject(SubjectUIBusy):
             _data['genotype'].append(item)
 
         _data.update({'description': self.alyx_description})
+        _data.update({'alive': self.alyx_alive})
 
         _data.update({'weighings': []})
         for item in self.alyx_weighings:
