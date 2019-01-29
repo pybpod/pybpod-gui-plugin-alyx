@@ -1,4 +1,3 @@
-from pybpodapi.bpod_modules.bpod_module import BpodModule
 from pybpod_alyx_module.alyxapi.alyxapi import AlyxAPI
 
 

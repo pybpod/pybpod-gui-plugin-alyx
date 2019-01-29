@@ -101,7 +101,7 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
             subj_info = self.get_alyx_subject_info(subjname)
             s.add_alyx_info(subj_info)
         else:
-            s.remove()
+            s.remove(True)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key_Escape:
