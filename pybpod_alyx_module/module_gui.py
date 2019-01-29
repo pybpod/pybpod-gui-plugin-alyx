@@ -91,10 +91,11 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
             if ignore_all:
                 break
             if not existing:
-                subj_info = self.get_alyx_subject_info(subjname)
-                # SubjectBase constructor adds Subject automatically to self.project so there's no need to add it here
-                newsubject = AlyxSubject(self.project)
-                newsubject.add_alyx_info(subj_info)
+                if is_alive:
+                    subj_info = self.get_alyx_subject_info(subjname)
+                    # SubjectBase constructor adds Subject automatically to self.project so there's no need to add it here
+                    newsubject = AlyxSubject(self.project)
+                    newsubject.add_alyx_info(subj_info)
 
     def __add_or_remove_subject(self, is_alive, s, subjname):
         if is_alive:
