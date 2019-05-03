@@ -4,7 +4,8 @@
 from setuptools import setup, find_packages
 
 requirements = [
-	'requests'
+	'requests',
+	'ibllib'
 ]
 
 setup(

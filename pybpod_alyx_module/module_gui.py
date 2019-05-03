@@ -47,7 +47,7 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         ]
 
     def setaddr(self):
-        self.api.setaddr(self._addressbox.value)
+        self.set_alyx_address(self._addressbox.value)
 
     def _connect(self):
         if self._connect_to_alyx(self._username.value,self._password.value):
@@ -65,21 +65,44 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
 
     def _get_subjects(self):
         result = self.get_alyx_subjects(self._username.value)
+        subjects = self.project.subjects.copy()
+        replace_all = False
+        ignore_all = False
         for subj in result:
             subjname = subj['nickname']
+            is_alive = subj['alive']
             existing = False
-            for s in self.project.subjects:
+            for s in subjects:
                 if s.name == subjname:
                     existing = True
-                    reply = self.question("Subject '{name}' already exists locally. Replace local details?".format(name=s.name), 'Update Subject')
+                    if replace_all:
+                        self.__add_or_remove_subject(is_alive, s, subjname)
+                        continue
+                    reply = self.question("Subject '{name}' already exists locally. Replace local details?".format(name=s.name),
+                                          'Update Subject', buttons=['no', 'yes', 'no_all', 'yes_all'])
                     if reply == 'yes':
-                        subj_info = self.get_alyx_subject_info(subjname)
-                        s.add_alyx_info(subj_info)
+                        self.__add_or_remove_subject(is_alive, s, subjname)
+                    if reply == 'yes_all':
+                        self.__add_or_remove_subject(is_alive, s, subjname)
+                        replace_all = True
+                    if reply == 'no_all':
+                        ignore_all = True
+                        break
+            if ignore_all:
+                break
             if not existing:
-                subj_info = self.get_alyx_subject_info(subjname)
-                # SubjectBase constructor adds Subject automatically to self.project so there's no need to add it here
-                newsubject = AlyxSubject(self.project)
-                newsubject.add_alyx_info(subj_info)
+                if is_alive:
+                    subj_info = self.get_alyx_subject_info(subjname)
+                    # SubjectBase constructor adds Subject automatically to self.project so there's no need to add it here
+                    newsubject = AlyxSubject(self.project)
+                    newsubject.add_alyx_info(subj_info)
+
+    def __add_or_remove_subject(self, is_alive, s, subjname):
+        if is_alive:
+            subj_info = self.get_alyx_subject_info(subjname)
+            s.add_alyx_info(subj_info)
+        else:
+            s.remove(True)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key_Escape:

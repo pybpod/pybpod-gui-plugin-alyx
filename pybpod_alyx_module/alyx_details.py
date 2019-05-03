@@ -7,7 +7,7 @@ from pyforms.controls import ControlList
 
 class AlyxDetails(AlyxModule, BaseWidget):
 
-    TITLE = 'Subject Details'
+    TITLE = 'Alyx subject details'
 
     def __init__(self, _subject=None):
         BaseWidget.__init__(self, self.TITLE, parent_win=_subject.mainwindow)
@@ -31,6 +31,7 @@ class AlyxDetails(AlyxModule, BaseWidget):
         self._details_list += ('Lab', _subject.alyx_lab)
         self._details_list += ('Genotype', ", ".join(map(str, _subject.alyx_genotype)) if _subject.alyx_genotype else None)
         self._details_list += ('Description', _subject.alyx_description)
+        self._details_list += ('Alive', _subject.alyx_alive)
         #self._details_list += ('Weighings', ", ".join(map(str, _subject.alyx_weighings)) if _subject.alyx_weighings else None)
         #self._details_list += ('Reference weight', _subject.alyx_reference_weight)
         #self._details_list += ('Water administrations', ", ".join(map(str, _subject.alyx_water_administrations)) if _subject.alyx_water_administrations else None)
@@ -40,7 +41,7 @@ class AlyxDetails(AlyxModule, BaseWidget):
 
         self.set_margin(10)
         self.setMinimumWidth(500)
-        self.setMinimumHeight(540)
+        self.setMinimumHeight(560)
 
         self.formset = [
             '_details_list'
