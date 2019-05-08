@@ -10,7 +10,7 @@ requirements = [
 
 setup(
 	name='pybpod-gui-plugin-alyx',
-	version="0.2",
+	version="1.1",
 	description="""PyBpod Alyx API connection module""",
 	author=['Sergio Copeto', 'Luís Teixeira'],
 	author_email='sergio.copeto@research.fchampalimaud.org, ricardo.ribeiro@research.fchampalimaud.org, micboucinha@gmail.com',
