@@ -47,7 +47,7 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         ]
 
     def setaddr(self):
-        self.api.setaddr(self._addressbox.value)
+        self.set_alyx_address(self._addressbox.value)
 
     def _connect(self):
         if self._connect_to_alyx(self._username.value,self._password.value):
