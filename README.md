@@ -1,32 +1,61 @@
-# Pybpod Alyx Module
+# PyBpod Alyx Module
 
 Alyx is a database designed for storage and retrieval of all data in an experimental neuroscience laboratory - from subject management through data acquisition, raw data file tracking and storage of metadata resulting from manual analysis.
 
-The Pybpod Alyx Module allows communication with Alyx databases inside the Pybpod environment. The goal is to use pybpod to manage Alyx information such as subjects and users, and associate Pybpod experiments with those users and subjects.
+Alyx is currently used in production at the [Cortexlab at UCL](https://www.ucl.ac.uk/cortexlab) and at the [International Brain Lab](https://www.internationalbrainlab.org/).
 
-Currently, only subject and data is implemented on the API side, but API expansion is easy. More information on the Alyx API can be found at http://alyx.readthedocs.io/en/latest/index.html
+The PyBpod Alyx Module allows communication with Alyx databases inside the [PyBpod](http://pybpod.com) environment. The goal is to use PyBpod to manage Alyx information such as subjects and users, and associate PyBpod experiments with those users and subjects.
+
+## Installation
+
+PyBpod Alyx Module is available through PyPI and you can install it using the following command in your Python environment:
+
+`pip install pybpod-gui-plugin-alyx`
 
 ## Usage
 
-Following the REST API structure, we can divide the requests into several categories.
+As with any other plugin for PyBpod, just add `pybpod_alyx_module` to your `GENERIC_EDITOR_PLUGINS_LIST` in your project's *user_settings.py*, as shown below:
 
-- USERS
-- SUBJECTS
-- Actions
-- WATER RESTRICTIONS
-- DATA
-
-Each category has it's GET and POST/PATCH methods, described at the Alyx API page shared above.
-
-The python implementation of the API calls is designed to mimic the documentation structure, for instance:
-
-``` python
-api.<CATEGORY>.<METHOD>.<METHODCALL>
+```python
+GENERIC_EDITOR_PLUGINS_LIST = [
+                                ...
+                                'pybpod_alyx_module',
+                                ...
+                              ]
 ```
-or more explicitly
 
-``` python
-api.subjects.get.allsubjects()
-``` 
+After opening PyBpod, you can right click in your Project and select the *Sync to Alyx* option.
 
-All the api calls shall return objects in the JSON format, so they can be easily managed according to the type of application the user wants to use it in.
+A new window will show up where you need to add the Alyx server's web address, your username and password.
+
+Afterwards, press the *Connect* button and if everything went well with the connection the *Status* message
+will change to *CONNECTED*.
+
+At that point, when you press the *Get Subjects* button, the Alyx subjects will be downloaded and added to
+the project. If there are subjects that already exist in your project, PyBpod will present a message asking
+if you want to override them.
+
+**Note:** Subjects that aren't alive and already exist in your project will be automatically removed from the project.
+
+To get details of a specific Subject, right click on its name and select the *Alyx details* option. This option
+only shows up on Alyx subjects as it would be expected.
+
+## Configuration extras
+
+The PyBpod Alyx Module also has some configuration options to simplify its usage.
+
+You can add the following options to your *user_settings.py* if you want.
+
+```python
+
+ALYX_PLUGIN_ADDRESS = 'https://alyxserver.com/'
+ALYX_PLUGIN_USERNAME = 'my_username'
+ALYX_PLUGIN_PASSWORD = 'my_password'
+
+```
+
+**Note:** The configuration options expect _strings_. The dummy information provided should be changed according to
+your settings.
+
+**Warning:** Although available to add through the configuration file, the password is saved as clear text.
+Use this option carefully.
