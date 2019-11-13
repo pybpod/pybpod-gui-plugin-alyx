@@ -12,7 +12,7 @@ class Get():
             result_data = result.json()
             for a in result_data:
                 print(a)
-    
+
     def project(self, _name):
         result = requests.get(conf.ALYX_PLUGIN_ADDRESS+'/projects/'+_name, headers=self.apibase.headers)
         if result.ok:

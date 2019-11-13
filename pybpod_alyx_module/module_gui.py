@@ -17,15 +17,15 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         AlyxModule.__init__(self)
 
         self.project = _project
-        
+
         self._addressbox = ControlText('Address')
         self._username = ControlText('User:')
         self._password = ControlText('Password:')
-        self._username = ControlText('User:',default = conf.ALYX_PLUGIN_USERNAME)
-        self._password = ControlText('Password:', default = conf.ALYX_PLUGIN_PASSWORD)
-        self._connect_btn = ControlButton('Connect',default = self._connect)
+        self._username = ControlText('User:', default=conf.ALYX_PLUGIN_USERNAME)
+        self._password = ControlText('Password:', default=conf.ALYX_PLUGIN_PASSWORD)
+        self._connect_btn = ControlButton('Connect', default=self._connect)
         self._status_lbl = ControlLabel('Status: Not Connected')
-        self._getsubjects_btn = ControlButton('Get Subjects', default = self._get_subjects)
+        self._getsubjects_btn = ControlButton('Get Subjects', default=self._get_subjects)
         self._getsubjects_btn.enabled = False
         self.set_margin(10)
 
@@ -34,7 +34,7 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
 
         if self.project.loggeduser is not None:
             self._username.value = self.project.loggeduser.name
-        
+
         self._password.form.lineEdit.setEchoMode(QLineEdit.Password)
 
         self.formset = [
@@ -50,9 +50,9 @@ class AlyxModuleGUI(AlyxModule, BaseWidget):
         self.set_alyx_address(self._addressbox.value)
 
     def _connect(self):
-        if self._connect_to_alyx(self._username.value,self._password.value):
+        if self._connect_to_alyx(self._username.value, self._password.value):
             usersearch = self.project.find_user(self._username.value)
-            if usersearch is None: # create this user on the project
+            if usersearch is None:  # create this user on the project
                 newuser = self.project.create_user()
                 newuser.name = self._username.value
                 newuser.node_double_clicked_event()
