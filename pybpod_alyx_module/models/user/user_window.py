@@ -9,6 +9,7 @@ from pybpod_alyx_module.models.subject.alyx_subject import AlyxSubject
 from pybpodgui_api.models.subject import Subject
 from pybpodgui_api.models.user import User
 
+
 class UserWindow(User, AlyxModule, BaseWidget):
 
     TITLE = 'Alyx connection'
@@ -19,19 +20,19 @@ class UserWindow(User, AlyxModule, BaseWidget):
         User.__init__(self, _project)
 
         self.project = _project
-        
+
         self._namebox = ControlText('User:')
         self._password = ControlText('Password:')
-        self._connect_btn = ControlButton('Connect',default = self._connect)
+        self._connect_btn = ControlButton('Connect', default=self._connect)
         self._status_lbl = ControlLabel('Status: Not Connected')
-        self._getsubjects_btn = ControlButton('Get Subjects', default = self._get_subjects)
+        self._getsubjects_btn = ControlButton('Get Subjects', default=self._get_subjects)
 
         self.set_margin(10)
 
         self._namebox.value = self._name
 
         self._namebox.changed_event = self.__name_changed_evt
-        
+
         self._password.form.lineEdit.setEchoMode(QLineEdit.Password)
 
         self.formset = [
@@ -45,7 +46,7 @@ class UserWindow(User, AlyxModule, BaseWidget):
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def _connect(self):
-        if self._connect_to_alyx(self._namebox.value,self._password.value):
+        if self._connect_to_alyx(self._namebox.value, self._password.value):
             self._status_lbl.value = 'Status: CONNECTED'
 
     def _get_subjects(self):
@@ -59,15 +60,13 @@ class UserWindow(User, AlyxModule, BaseWidget):
                     reply = self.question('Subject' + s.name + 'Already exists locally. Replace details?', 'Update Subject')
                     if reply == 'yes':
                         s.add_alyx_info(subj)
-            if existing == False:
+            if existing is False:
                 newsubject = AlyxSubject(self.project)
                 newsubject.add_alyx_info(subj)
 
-    
     def __name_changed_evt(self):
         if not hasattr(self, '_update_name') or not self._update_name:
             self.name = self._namebox.value
-            
 
     @property
     def name(self):
