@@ -15,7 +15,6 @@ class AlyxDetails(AlyxModule, BaseWidget):
 
         self._details_list = ControlList('Alyx subject details', readonly=True)
         self._details_list += ('Nickname', _subject.name)
-        #self._details_list += ('URL', _subject.alyx_url)
         self._details_list += ('ID', _subject.alyx_id)
         self._details_list += ('Responsible user', _subject.alyx_responsible_user)
         self._details_list += ('Birth date', _subject.alyx_birth_date)
@@ -32,12 +31,6 @@ class AlyxDetails(AlyxModule, BaseWidget):
         self._details_list += ('Genotype', ", ".join(map(str, _subject.alyx_genotype)) if _subject.alyx_genotype else None)
         self._details_list += ('Description', _subject.alyx_description)
         self._details_list += ('Alive', _subject.alyx_alive)
-        #self._details_list += ('Weighings', ", ".join(map(str, _subject.alyx_weighings)) if _subject.alyx_weighings else None)
-        #self._details_list += ('Reference weight', _subject.alyx_reference_weight)
-        #self._details_list += ('Water administrations', ", ".join(map(str, _subject.alyx_water_administrations)) if _subject.alyx_water_administrations else None)
-        #self._details_list += ('Last water restriction', _subject.alyx_last_water_restriction)
-        #self._details_list += ('Expected water', _subject.alyx_expected_water)
-        #self._details_list += ('Remaining water', _subject.alyx_remaining_water)
 
         self.set_margin(10)
         self.setMinimumWidth(500)

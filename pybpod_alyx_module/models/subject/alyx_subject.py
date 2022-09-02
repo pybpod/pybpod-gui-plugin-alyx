@@ -27,8 +27,8 @@ class AlyxSubject(SubjectUIBusy):
         """
         Save subject data on filesystem.
 
-        :ivar str project_path: Project path.  
-        :return: Dictionary containing the setup info to save.  
+        :ivar str project_path: Project path.
+        :return: Dictionary containing the setup info to save.
         :rtype: dict
         """
         if not hasattr(self, 'alyx_id'):
@@ -38,8 +38,9 @@ class AlyxSubject(SubjectUIBusy):
         if not self.name:
             logger.warning("Skipping subject without name")
             return None
-        else:  
-            if not os.path.exists(self.path): os.makedirs(self.path)
+        else:
+            if not os.path.exists(self.path):
+                os.makedirs(self.path)
 
             if self.data:
                 data = self.data
@@ -47,14 +48,15 @@ class AlyxSubject(SubjectUIBusy):
                 data = json.scadict(
                     uuid4_id=self.uuid4,
                     software='PyBpod GUI API v'+str(pybpodgui_api.__version__),
-                    def_url ='http://pybpod.readthedocs.org',
+                    def_url='http://pybpod.readthedocs.org',
                     def_text='This file contains information about a subject used on PyBpod GUI.',
                 )
 
             self._save_alyx_member_to_json(data)
 
             config_path = os.path.join(self.path, self.name+'.json')
-            with open(config_path, 'w') as fstream: json.dump(data, fstream)
+            with open(config_path, 'w') as fstream:
+                json.dump(data, fstream)
 
     def toJSON(self):
         if not hasattr(self, 'alyx_id'):
@@ -63,7 +65,7 @@ class AlyxSubject(SubjectUIBusy):
         data = json.scadict(
                     uuid4_id=self.uuid4,
                     software='PyBpod GUI API v'+str(pybpodgui_api.__version__),
-                    def_url ='http://pybpod.readthedocs.org',
+                    def_url='http://pybpod.readthedocs.org',
                     def_text='This file contains information about a subject used on PyBpod GUI.',
                 )
 
@@ -80,10 +82,10 @@ class AlyxSubject(SubjectUIBusy):
         :ivar str subject_path: Path of the subject
         :ivar dict data: data object that contains all subject info
         """
-        self.name  = os.path.basename(path)
+        self.name = os.path.basename(path)
 
         try:
-            with open( os.path.join(self.path, self.name+'.json'), 'r' ) as stream:
+            with open(os.path.join(self.path, self.name+'.json'), 'r') as stream:
                 self.data = data = json.load(stream)
 
             if data.get('alyx_id', None) is None:
