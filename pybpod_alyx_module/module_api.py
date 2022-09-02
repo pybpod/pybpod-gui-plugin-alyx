@@ -1,4 +1,4 @@
-from oneibl.webclient import AlyxClient
+from one.webclient import AlyxClient
 from confapp import conf
 
 

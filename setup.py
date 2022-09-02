@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 
 requirements = [
-    'ibllib'
+    'ONE-api'
 ]
 
 setup(
